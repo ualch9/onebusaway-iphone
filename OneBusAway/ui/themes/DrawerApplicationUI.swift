@@ -11,33 +11,27 @@ import FirebaseAnalytics
 import OBAKit
 
 @objc class DrawerApplicationUI: NSObject {
-    var application: OBAApplication
-    let tabBarController = UITabBarController.init()
+    private let application: OBAApplication
+    private let tabBarController = UITabBarController()
 
     // MARK: - Map Tab
-    var mapTableController: MapTableViewController
-    var mapPulley: PulleyViewController
-    let mapPulleyNav: UINavigationController
-    var mapController: OBAMapViewController
-    let drawerNavigation: UINavigationController
+    private var mapTableController: MapTableViewController
+    private var mapPulley: PulleyViewController
+    private var mapPulleyNav: UINavigationController?
+    private var mapController: OBAMapViewController
+    private let drawerNavigation: UINavigationController
 
     // MARK: - Recents Tab
-    let recentsController = OBARecentStopsViewController.init()
-    lazy var recentsNavigation: UINavigationController = {
-        return UINavigationController.init(rootViewController: recentsController)
-    }()
+    private let recentsController = OBARecentStopsViewController()
+    private lazy var recentsNavigation = UINavigationController(rootViewController: recentsController)
 
     // MARK: - Bookmarks Tab
-    let bookmarksController = OBABookmarksViewController.init()
-    lazy var bookmarksNavigation: UINavigationController = {
-        return UINavigationController.init(rootViewController: bookmarksController)
-    }()
+    private let bookmarksController = OBABookmarksViewController()
+    private lazy var bookmarksNavigation = UINavigationController(rootViewController: bookmarksController)
 
     // MARK: - Info Tab
-    let infoController = OBAInfoViewController.init()
-    lazy var infoNavigation: UINavigationController = {
-        return UINavigationController.init(rootViewController: infoController)
-    }()
+    private let infoController = OBAInfoViewController()
+    private lazy var infoNavigation = UINavigationController(rootViewController: infoController)
 
     // MARK: - Init
     required init(application: OBAApplication) {
@@ -69,13 +63,15 @@ import OBAKit
         mapPulley.tabBarItem.image = mapTableController.tabBarItem.image
         mapPulley.tabBarItem.selectedImage = mapTableController.tabBarItem.selectedImage
 
-        mapPulleyNav = UINavigationController(rootViewController: mapPulley)
+        if !useStopDrawer {
+            mapPulleyNav = UINavigationController(rootViewController: mapPulley)
+        }
 
         super.init()
 
         mapPulley.delegate = self
 
-        tabBarController.viewControllers = [mapPulleyNav, recentsNavigation, bookmarksNavigation, infoNavigation]
+        tabBarController.viewControllers = [mapPulleyNav ?? mapPulley, recentsNavigation, bookmarksNavigation, infoNavigation]
         tabBarController.delegate = self
     }
 }
@@ -174,7 +170,7 @@ extension DrawerApplicationUI: OBAApplicationUI {
         switch navigationTarget.target {
         case .map, .searchResults:
             viewController = mapTableController
-            topController = mapPulleyNav
+            topController = mapPulleyNav ?? mapPulley
         case .recentStops:
             viewController = recentsController
             topController = recentsNavigation

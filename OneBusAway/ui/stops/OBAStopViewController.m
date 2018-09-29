@@ -26,7 +26,6 @@
 #import "OBAArrivalDepartureOptionsSheet.h"
 #import "UIViewController+OBAAdditions.h"
 #import "EXTScope.h"
-#import "OBANavigationTitleView.h"
 
 @import Masonry;
 
