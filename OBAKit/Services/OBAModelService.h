@@ -21,12 +21,10 @@
 #import <OBAKit/OBAReferencesV2.h>
 #import <OBAKit/OBAStopV2.h>
 #import <OBAKit/OBAPlacemark.h>
-#import <OBAKit/OBATripInstanceRef.h>
 #import <OBAKit/OBAArrivalAndDepartureInstanceRef.h>
 #import <OBAKit/OBAReportProblemWithStopV2.h>
 #import <OBAKit/OBAReportProblemWithTripV2.h>
 #import <OBAKit/OBALocationManager.h>
-#import <OBAKit/OBAArrivalAndDepartureConvertible.h>
 
 @import PromiseKit;
 @import MapKit;
@@ -54,27 +52,6 @@ extern NSString * const OBAAgenciesWithCoverageAPIPath;
  Cancels all open network requests.
  */
 - (void)cancelOpenConnections;
-
-#pragma mark - OBAArrivalAndDepartureInstanceRef -> OBAArrivalAndDepartureV2
-
-/**
- Retrieves an up-to-date OBAArrivalAndDepartureV2 object.
-
- @param instanceRef The OBAArrivalAndDepartureInstanceRef whose parent object we're updating (I think? The model architecture is still confusing to me.)
-
- @return A promise that resolves to a OBAArrivalAndDepartureV2 object.
- */
-- (AnyPromise*)requestArrivalAndDeparture:(OBAArrivalAndDepartureInstanceRef*)instanceRef;
-
-#pragma mark - OBAArrivalAndDepartureConvertible -> OBAArrivalAndDepartureV2
-
-/**
- Retrieves an OBAArrivalAndDepartureV2 object from the server given a trip deep link object.
-
- @param convertible An object that contains properties that can be used to retrieve an OBAArrivalAndDepartureV2 object.
- @return A promise that resolves to an OBAArrivalAndDepartureV2 object
- */
-- (AnyPromise*)requestArrivalAndDepartureWithConvertible:(id<OBAArrivalAndDepartureConvertible>)convertible;
 
 #pragma mark - Vehicle ID -> OBAVehicleStatusV2
 
@@ -119,15 +96,6 @@ extern NSString * const OBAAgenciesWithCoverageAPIPath;
  */
 - (OBAModelServiceRequest*)requestShapeForId:(NSString *)shapeId
                                 completionBlock:(OBADataSourceCompletion)completion;
-
-#pragma mark - Current Time
-
-/**
- Retrieves the current server time as an NSNumber representing the number of milliseconds since January 1, 1970.
-
- @return A promise that resolves to an NSNumber object.
- */
-- (AnyPromise*)requestCurrentTime;
 
 /**
  Makes an asynchronous request for a set of stops within a given region

@@ -15,11 +15,11 @@ NS_ASSUME_NONNULL_BEGIN
  that can be used to retrieve an OBAArrivalAndDepartureV2 from the server.
  */
 @protocol OBAArrivalAndDepartureConvertible<NSObject, NSCopying>
-- (NSString*)stopID;
-- (NSString*)tripID;
-- (long long)serviceDate;
-- (NSString*)vehicleID;
-- (NSInteger)stopSequence;
+@property(nonatomic,copy,readonly) NSString *stopID;
+@property(nonatomic,copy,readonly) NSString *tripID;
+@property(nonatomic,assign,readonly) long long serviceDate;
+@property(nonatomic,copy,readonly) NSString *vehicleID;
+@property(nonatomic,assign,readonly) NSInteger stopSequence;
 @end
 
 NS_ASSUME_NONNULL_END

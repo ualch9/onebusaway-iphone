@@ -288,11 +288,12 @@ static NSTimeInterval const kRefreshTimeInterval = 30;
         return;
     }
 
-    AnyPromise *arrivalDeparturePromise = [self promiseArrivalDeparture];
+    PromiseWrapper *arrivalDeparturePromise = [self promiseArrivalDeparture];
     AnyPromise *tripDetailsPromise = nil;
 
     if (arrivalDeparturePromise) {
-        tripDetailsPromise = arrivalDeparturePromise.then(^(OBAArrivalAndDepartureV2 *arrivalAndDeparture) {
+        tripDetailsPromise = arrivalDeparturePromise.anyPromise.then(^(NetworkResponse *networkResponse) {
+            OBAArrivalAndDepartureV2 *arrivalAndDeparture = networkResponse.object;
             self.arrivalAndDeparture = arrivalAndDeparture;
             self.departureView.departureRow = [self createDepartureRow:arrivalAndDeparture];
             self.mapController.arrivalAndDeparture = self.arrivalAndDeparture;
@@ -321,7 +322,7 @@ static NSTimeInterval const kRefreshTimeInterval = 30;
     });
 }
 
-- (nullable AnyPromise*)promiseArrivalDeparture {
+- (nullable PromiseWrapper*)promiseArrivalDeparture {
     if (self.convertible) {
         return [self.modelService requestArrivalAndDepartureWithConvertible:self.convertible];
     }

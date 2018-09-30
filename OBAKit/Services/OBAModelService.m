@@ -87,30 +87,6 @@ static const CLLocationAccuracy kRegionalRadius = 40000;
 
 #pragma mark - Promise-based Requests
 
-- (AnyPromise*)requestArrivalAndDeparture:(OBAArrivalAndDepartureInstanceRef*)instanceRef {
-    return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
-        [self requestArrivalAndDepartureForStop:instanceRef completionBlock:^(id responseData, NSHTTPURLResponse *response, NSError *error) {
-            resolve(error ?: [responseData entry]);
-        }];
-    }];
-}
-
-- (AnyPromise*)requestArrivalAndDepartureWithConvertible:(id<OBAArrivalAndDepartureConvertible>)convertible {
-    return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
-        [self requestArrivalAndDepartureForStopID:[convertible stopID] tripID:[convertible tripID] serviceDate:[convertible serviceDate] vehicleID:[convertible vehicleID] stopSequence:[convertible stopSequence] completionBlock:^(id responseData, NSHTTPURLResponse *response, NSError *error) {
-            resolve(error ?: [responseData entry]);
-        }];
-    }];
-}
-
-- (AnyPromise*)requestCurrentTime {
-    return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
-        [self requestCurrentTimeWithCompletionBlock:^(id responseData, NSHTTPURLResponse *response, NSError *error) {
-            resolve(error ?: responseData[@"entry"][@"time"]);
-        }];
-    }];
-}
-
 - (AnyPromise*)requestVehicleForID:(NSString*)vehicleID {
     return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         [self requestVehicleForId:vehicleID completionBlock:^(OBAEntryWithReferencesV2 *responseData, NSHTTPURLResponse *response, NSError *error) {
@@ -143,14 +119,6 @@ static const CLLocationAccuracy kRegionalRadius = 40000;
 }
 
 #pragma mark - Old School Requests
-
-- (OBAModelServiceRequest*)requestCurrentTimeWithCompletionBlock:(OBADataSourceCompletion)completion {
-    return [self request:self.obaJsonDataSource
-                     url:@"/api/where/current-time.json"
-                    args:nil
-                selector:nil
-         completionBlock:completion];
-}
 
 - (AnyPromise*)requestStopsForRegion:(MKCoordinateRegion)region {
     return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
@@ -306,39 +274,6 @@ static const CLLocationAccuracy kRegionalRadius = 40000;
             resolve([NSArray arrayWithArray:placemarks]);
         }];
     }];
-}
-
-- (OBAModelServiceRequest*)requestArrivalAndDepartureForStop:(OBAArrivalAndDepartureInstanceRef *)instance completionBlock:(OBADataSourceCompletion)completion {
-    OBATripInstanceRef *tripInstance = instance.tripInstance;
-
-    return [self requestArrivalAndDepartureForStopID:instance.stopId tripID:tripInstance.tripId serviceDate:tripInstance.serviceDate vehicleID:tripInstance.vehicleId stopSequence:instance.stopSequence completionBlock:completion];
-}
-
-- (OBAModelServiceRequest*)requestArrivalAndDepartureForStopID:(NSString*)stopID
-                                                           tripID:(NSString*)tripID
-                                                      serviceDate:(long long)serviceDate
-                                                        vehicleID:(nullable NSString*)vehicleID
-                                                     stopSequence:(NSInteger)stopSequence
-                                                completionBlock:(OBADataSourceCompletion)completion {
-
-    NSMutableDictionary *args = [[NSMutableDictionary alloc] init];
-
-    args[@"tripId"] = tripID;
-    args[@"serviceDate"] = @(serviceDate);
-
-    if (vehicleID) {
-        args[@"vehicleId"] = vehicleID;
-    }
-
-    if (stopSequence >= 0) {
-        args[@"stopSequence"] = @(stopSequence);
-    }
-
-    return [self request:self.obaJsonDataSource
-                     url:[NSString stringWithFormat:@"/api/where/arrival-and-departure-for-stop/%@.json", [OBAURLHelpers escapePathVariable:stopID]]
-                    args:args
-                selector:@selector(getArrivalAndDepartureForStopV2FromJSON:error:)
-         completionBlock:completion];
 }
 
 - (OBAModelServiceRequest*)requestVehicleForId:(NSString *)vehicleId completionBlock:(OBADataSourceCompletion)completion {

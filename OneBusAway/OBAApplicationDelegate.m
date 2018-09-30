@@ -244,7 +244,8 @@ static NSString * const OBALastRegionRefreshDateUserDefaultsKey = @"OBALastRegio
 
     [SVProgressHUD show];
 
-    [self.application.modelService requestArrivalAndDepartureWithConvertible:tripDeepLink].then(^(OBAArrivalAndDepartureV2 *arrivalAndDeparture) {
+    [self.application.modelService requestArrivalAndDepartureWithConvertible:tripDeepLink].anyPromise.then(^(NetworkResponse *networkResponse) {
+        OBAArrivalAndDepartureV2 *arrivalAndDeparture = networkResponse.object;
         tripDeepLink.name = arrivalAndDeparture.bestAvailableNameWithHeadsign;
 
         // OK, it works, so write it into the model DAO.
@@ -363,7 +364,8 @@ static NSString * const OBALastRegionRefreshDateUserDefaultsKey = @"OBALastRegio
 
     [SVProgressHUD show];
 
-    [self.application.modelService requestArrivalAndDepartureWithConvertible:alarm].then(^(OBAArrivalAndDepartureV2 *arrivalAndDeparture) {
+    [self.application.modelService requestArrivalAndDepartureWithConvertible:alarm].anyPromise.then(^(NetworkResponse *networkResponse) {
+        OBAArrivalAndDepartureV2 *arrivalAndDeparture = networkResponse.object;
         alarm.title = arrivalAndDeparture.bestAvailableNameWithHeadsign;
         OBAAlarmNavigationTarget *alarmTarget = [OBAAlarmNavigationTarget navigationTargetWithAlarm:alarm];
         [self navigateToTarget:alarmTarget];

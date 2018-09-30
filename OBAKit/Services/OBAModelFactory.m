@@ -183,7 +183,7 @@ static NSString * const kReferences = @"references";
     return ads;
 }
 
-- (OBAEntryWithReferencesV2*) getArrivalAndDepartureForStopV2FromJSON:(NSDictionary*)jsonDictionary error:(NSError**)error {
+- (OBAArrivalAndDepartureV2*) getArrivalAndDepartureForStopV2FromJSON:(NSDictionary*)jsonDictionary error:(NSError**)error {
     
     OBAEntryWithReferencesV2 * entry = [[OBAEntryWithReferencesV2 alloc] initWithReferences:_references];
     
@@ -193,8 +193,7 @@ static NSString * const kReferences = @"references";
     [digester addSetNext:@selector(setEntry:) forPrefix:@"/entry"];
     
     [digester parse:jsonDictionary withRoot:entry parameters:[self getDigesterParameters] error:error];
-    
-    return entry;
+    return [entry entry];
 }
 
 - (OBAEntryWithReferencesV2*) getTripDetailsV2FromJSON:(NSDictionary*)json error:(NSError**)error {
