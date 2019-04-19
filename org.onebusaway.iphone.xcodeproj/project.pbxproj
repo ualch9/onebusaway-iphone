@@ -223,6 +223,7 @@
 		93BC49EC1FB8D628008B710D /* SVProgressHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93BC49EA1FB8D628008B710D /* SVProgressHUD.framework */; };
 		93BC49ED1FB8D628008B710D /* GoogleAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93BC49EB1FB8D628008B710D /* GoogleAnalytics.framework */; };
 		93BD28AE22565D7700F0D2DB /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93BD28AD22565D7700F0D2DB /* PromiseKit.framework */; };
+		93BD28B12256A18D00F0D2DB /* OneFingerZoomGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93BD28B02256A18D00F0D2DB /* OneFingerZoomGestureRecognizer.swift */; };
 		93C21DA0214A287600F422DA /* TableRowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C21D9F214A287600F422DA /* TableRowController.swift */; };
 		93C21DA3214A364000F422DA /* ChevronCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C21DA2214A364000F422DA /* ChevronCardCell.swift */; };
 		93C3936B1D8A3A4D0080F370 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93C3936A1D8A3A4D0080F370 /* UIKit.framework */; };
@@ -614,6 +615,7 @@
 		93BC49EA1FB8D628008B710D /* SVProgressHUD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SVProgressHUD.framework; path = Carthage/Build/iOS/SVProgressHUD.framework; sourceTree = "<group>"; };
 		93BC49EB1FB8D628008B710D /* GoogleAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleAnalytics.framework; path = Carthage/Build/iOS/GoogleAnalytics.framework; sourceTree = "<group>"; };
 		93BD28AD22565D7700F0D2DB /* PromiseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PromiseKit.framework; path = Carthage/Build/iOS/PromiseKit.framework; sourceTree = "<group>"; };
+		93BD28B02256A18D00F0D2DB /* OneFingerZoomGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneFingerZoomGestureRecognizer.swift; sourceTree = "<group>"; };
 		93C21D9F214A287600F422DA /* TableRowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableRowController.swift; sourceTree = "<group>"; };
 		93C21DA2214A364000F422DA /* ChevronCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChevronCardCell.swift; sourceTree = "<group>"; };
 		93C3936A1D8A3A4D0080F370 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -1633,6 +1635,7 @@
 				93876DFA1E68AD3900B4343F /* OBAMapAnnotationViewBuilder.m */,
 				93656B842105388A009A3524 /* StopAnnotationView.swift */,
 				931131FE214D7BA20063D400 /* MapTypePickerController.swift */,
+				93BD28B02256A18D00F0D2DB /* OneFingerZoomGestureRecognizer.swift */,
 			);
 			path = map;
 			sourceTree = "<group>";
@@ -2073,6 +2076,7 @@
 				93FE60261E0B2F34006EC9FB /* SVPulsingAnnotationView.m in Sources */,
 				931C60CE1EC3969B0086EC37 /* OBACrashlyticsLogger.m in Sources */,
 				934197A81DB0C140004BBBB7 /* OBAReportProblemWithRecentTripsViewController.m in Sources */,
+				93BD28B12256A18D00F0D2DB /* OneFingerZoomGestureRecognizer.swift in Sources */,
 				930AFE991DD11EF90092AE82 /* OBAWalkableCell.m in Sources */,
 				93A6E9EE1F5CC11800AFA61C /* UIViewController+OBAAdditions.m in Sources */,
 				936EB1C11E92F30C00F4F3A7 /* OnboardingViewController.swift in Sources */,

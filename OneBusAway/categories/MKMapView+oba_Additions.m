@@ -11,13 +11,11 @@
 
 @implementation MKMapView (oba_Additions)
 
-- (MKCoordinateSpan)oba_coordinateSpanWithCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate zoomLevel:(NSUInteger)zoomLevel
-{
+- (MKCoordinateSpan)oba_coordinateSpanWithCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate zoomLevel:(NSUInteger)zoomLevel {
     return [OBAMapHelpers coordinateSpanWithCenterCoordinate:centerCoordinate zoomLevel:zoomLevel viewSize:self.bounds.size];
 }
 
-- (void)oba_setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate zoomLevel:(NSUInteger)zoomLevel animated:(BOOL)animated
-{
+- (void)oba_setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate zoomLevel:(NSUInteger)zoomLevel animated:(BOOL)animated {
     // clamp large numbers to 28
     zoomLevel = MIN(zoomLevel, 28);
     

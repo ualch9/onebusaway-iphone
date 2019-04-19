@@ -35,7 +35,7 @@
 static const NSUInteger kShowNClosestStops = 4;
 static const double kStopsInRegionRefreshDelayOnDrag = 0.1;
 
-@interface OBAMapViewController ()<MKMapViewDelegate, UISearchBarDelegate, UISearchControllerDelegate, MapSearchDelegate, OBANavigator, OBAMapRegionDelegate, OBAVehicleDisambiguationDelegate>
+@interface OBAMapViewController ()<MKMapViewDelegate, UISearchBarDelegate, UISearchControllerDelegate, MapSearchDelegate, OBANavigator, OBAMapRegionDelegate, OBAVehicleDisambiguationDelegate, UIGestureRecognizerDelegate>
 
 @property(nonatomic,strong) OBAApplication *application;
 
@@ -45,6 +45,7 @@ static const double kStopsInRegionRefreshDelayOnDrag = 0.1;
 @property(nonatomic,strong) OBAToastView *toastView;
 @property(nonatomic,strong) UIImageView *mapCenterImage;
 @property(nonatomic,strong) UIButton *forecastButton;
+@property(nonatomic,strong) OneFingerZoomGestureRecognizer *zoomRecognizer;
 
 // Search
 @property(nonatomic,strong) UISearchController *searchController;
@@ -1072,6 +1073,10 @@ static const double kStopsInRegionRefreshDelayOnDrag = 0.1;
     self.mapView.mapType = [OBAApplication.sharedApplication.userDefaults integerForKey:OBAMapSelectedTypeDefaultsKey];
     [self.view addSubview:self.mapView];
 
+    self.zoomRecognizer = [[OneFingerZoomGestureRecognizer alloc] init];
+    self.zoomRecognizer.delegate = self;
+    [self.mapView addGestureRecognizer:self.zoomRecognizer];
+
     if (self.usingDrawerUI) {
         self.mapCenterImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map_center"]];
         self.mapCenterImage.alpha = 0.3f;
@@ -1080,6 +1085,10 @@ static const double kStopsInRegionRefreshDelayOnDrag = 0.1;
             make.center.equalTo(self.mapView);
         }];
     }
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    return YES;
 }
 
 - (void)configureToastView {

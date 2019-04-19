@@ -39,5 +39,6 @@
 #import "OBAArrivalAndDepartureViewController.h"
 
 // Categories
+#import "MKMapView+oba_Additions.h"
 #import "UIViewController+OBAAdditions.h"
 #import "UIViewController+OBAContainment.h"
