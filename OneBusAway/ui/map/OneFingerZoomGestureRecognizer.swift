@@ -9,19 +9,8 @@
 import UIKit
 import MapKit
 
-enum AGSSingleFingerZoomMode {
-    case Google
-    case UpOutDownIn(centeredOnTap:Bool)
-    case UpInDownOut(centeredOnTap:Bool)
-
-    func translateScaleFactor(factor: Double) -> Double {
-        return -factor
-    }
-}
-
 @objc class OneFingerZoomGestureRecognizer: UIGestureRecognizer {
     var scalePower: Double = 5.0
-    var zoomMode: AGSSingleFingerZoomMode = .Google
 
     private var anchorPoint: CGPoint?
 
@@ -59,28 +48,25 @@ enum AGSSingleFingerZoomMode {
         super.touchesMoved(touches, with: event)
 
         guard let mapView = self.view as? MKMapView else {
-            print("You should only apply \(type(of: self)) to an MKMapView!")
-            state = .failed
-            return
+            fatalError("This gesture recognizer can only be used with an MKMapView.")
         }
 
         guard [.began, .changed].contains(state) else {
             return
         }
 
-        guard touches.count == 1 else {
+        guard
+            touches.count == 1,
+            let touch = touches.first
+        else {
             state = .cancelled
-            return
-        }
-
-        guard let touch = touches.first else {
             return
         }
 
         let prevLoc = touch.previousLocation(in: mapView)
         let thisLoc = touch.location(in: mapView)
 
-        if prevLoc.equalTo(thisLoc) {
+        guard prevLoc != thisLoc else {
             return
         }
 
@@ -91,8 +77,7 @@ enum AGSSingleFingerZoomMode {
 
         print("ZOOM! Scale Ratio: \(scaleRatio)")
 
-        let ugh = Int(mapView.oba_zoomLevel())
-        let currentZoom = Double(ugh)
+        let currentZoom = Double(Int(mapView.oba_zoomLevel()))
         let newZoom = currentZoom * scaleRatio
         let clamped = UInt(newZoom)
         print("Zoom to level \(clamped)")
