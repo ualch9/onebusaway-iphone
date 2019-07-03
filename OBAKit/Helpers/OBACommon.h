@@ -35,6 +35,7 @@ extern NSString * const OBADisplayUserHeadingOnMapDefaultsKey;
 extern NSString * const OBAOptInToTrackingDefaultsKey;
 extern NSString * const OBAOptInToCrashReportingDefaultsKey;
 extern NSString * const OBAMapSelectedTypeDefaultsKey;
+extern NSString * const OBADisplayMapDrawerDefaultsKey;
 extern NSString * const OBADebugModeUserDefaultsKey;
 extern NSString * const OBAUseStopDrawerDefaultsKey;
 extern NSString * const OBAForecastUpdatedAtDefaultsKey;

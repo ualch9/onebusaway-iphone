@@ -128,7 +128,8 @@ NSString * const OBAOccupancyStatusTutorialViewedDefaultsKey = @"OBAOccupancySta
     mutableDefaults[OBAShowTestAlertsDefaultsKey] = @(NO);
     mutableDefaults[OBAForecastUpdatedAtDefaultsKey] = NSDate.distantPast;
     mutableDefaults[OBAOccupancyStatusTutorialViewedDefaultsKey] = @(NO);
-
+	mutableDefaults[OBADisplayMapDrawerDefaultsKey] = @(YES);
+	
     defaults = mutableDefaults;
 #endif
 

@@ -55,7 +55,7 @@ import OBAKit
 
         mapPulley = PulleyViewController(contentViewController: mapController, drawerViewController: drawerNavigation)
         mapPulley.defaultCollapsedHeight = DrawerApplicationUI.calculateCollapsedHeightForCurrentDevice()
-        mapPulley.initialDrawerPosition = .collapsed
+		mapPulley.initialDrawerPosition = application.userDefaults.bool(forKey: OBADisplayMapDrawerDefaultsKey) ? .collapsed : .closed
 
         if #available(iOS 11.0, *) {
             // nop
@@ -215,6 +215,8 @@ extension DrawerApplicationUI: OBAApplicationUI {
 extension DrawerApplicationUI: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         application.userDefaults.set(tabBarController.selectedIndex, forKey: DrawerApplicationUI.kOBASelectedTabIndexDefaultsKey)
+		
+		self.mapPulley.setDrawerPosition(position: application.userDefaults.bool(forKey: OBADisplayMapDrawerDefaultsKey) ? .collapsed : .closed, animated: false)
     }
 
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {

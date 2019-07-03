@@ -28,6 +28,7 @@ NSString * const OBADisplayUserHeadingOnMapDefaultsKey = @"OBADisplayUserHeading
 NSString * const OBAOptInToTrackingDefaultsKey = @"OBAOptInToTrackingDefaultsKey";
 NSString * const OBAOptInToCrashReportingDefaultsKey = @"OBAOptInToCrashReportingDefaultsKey";
 NSString * const OBAMapSelectedTypeDefaultsKey = @"OBAMapSelectedTypeDefaultsKey";
+NSString * const OBADisplayMapDrawerDefaultsKey = @"OBADisplayMapDrawerDefaultsKey";
 NSString * const OBADebugModeUserDefaultsKey = @"OBADebugModeUserDefaultsKey";
 NSString * const OBAForecastUpdatedAtDefaultsKey = @"OBAForecastUpdatedAtDefaultsKey";
 NSString * const OBAForecastDataDefaultsKey = @"OBAForecastDataDefaultsKey";
