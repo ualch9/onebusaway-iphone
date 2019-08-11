@@ -122,7 +122,7 @@ NSString* const kOSSettingsKeyProvidesAppNotificationSettings = @"kOSSettingsKey
 
 @implementation OneSignal
 
-NSString* const ONESIGNAL_VERSION = @"020905";
+NSString* const ONESIGNAL_VERSION = @"021001";
 static NSString* mSDKType = @"native";
 static BOOL coldStartFromTapOnNotification = NO;
 
@@ -194,6 +194,16 @@ static BOOL providesAppNotificationSettings = false;
 
 static BOOL performedOnSessionRequest = false;
 static NSString *pendingExternalUserId;
+
+// Notification Display Type Delegate
+static __weak id<OSNotificationDisplayTypeDelegate> _displayDelegate;
+
+// Display type is used in multiple areas of the SDK
+// To avoid calling the delegate multiple times, we store
+// the type and notification ID for each notification
+// These data structures *MUST* be accessed on the main thread only
+static NSMutableDictionary<NSString *, NSNumber *> *_displayTypeMap;
+static NSMutableDictionary<NSString *, NSMutableArray<OSNotificationDisplayTypeResponse> *> *_pendingDisplayTypeCallbacks;
 
 static OSNotificationDisplayType _inFocusDisplayType = OSNotificationDisplayTypeInAppAlert;
 + (void)setInFocusDisplayType:(OSNotificationDisplayType)value {
@@ -392,6 +402,10 @@ static ObservableEmailSubscriptionStateChangesType* _emailSubscriptionStateChang
     
     performedOnSessionRequest = false;
     pendingExternalUserId = nil;
+    
+    _displayDelegate = nil;
+    _displayTypeMap = [NSMutableDictionary new];
+    _pendingDisplayTypeCallbacks = [NSMutableDictionary new];
 }
 
 // Set to false as soon as it's read.
@@ -876,6 +890,9 @@ void onesignal_Log(ONE_S_LOG_LEVEL logLevel, NSString* message) {
     return status;
 }
 
++ (void)setNotificationDisplayTypeDelegate:(NSObject<OSNotificationDisplayTypeDelegate> *)delegate {
+    _displayDelegate = delegate;
+}
 
 // onOSPermissionChanged should only fire if something changed.
 + (void)addPermissionObserver:(NSObject<OSPermissionObserver>*)observer {
@@ -1743,6 +1760,88 @@ static NSString *_lastAppActiveMessageId;
 static NSString *_lastnonActiveMessageId;
 + (void)setLastnonActiveMessageId:(NSString*)value { _lastnonActiveMessageId = value; }
 
++ (void)displayTypeForNotificationPayload:(NSDictionary *)payload withCompletion:(OSNotificationDisplayTypeResponse)completion {
+    [OneSignalHelper runOnMainThread:^{
+        if (!_displayTypeMap)
+            _displayTypeMap = [NSMutableDictionary new];
+        
+        if (!_pendingDisplayTypeCallbacks)
+            _pendingDisplayTypeCallbacks = [NSMutableDictionary new];
+        
+        var type = self.inFocusDisplayType;
+        
+        // check to make sure the app is in focus and it's a OneSignal notification
+        if (![OneSignalHelper isOneSignalPayload:payload]
+            || UIApplication.sharedApplication.applicationState != UIApplicationStateActive) {
+            completion(type);
+            return;
+        }
+        
+        let osPayload = [OSNotificationPayload parseWithApns:payload];
+        
+        let notificationId = osPayload.notificationID;
+        
+        // Prevent calling the delegate multiple times for the same payload
+        // Checks to see if there is a pending delegate request
+        if (_pendingDisplayTypeCallbacks[notificationId]) {
+            [_pendingDisplayTypeCallbacks[notificationId] addObject:completion];
+            // checks to see if the delegate already responded for this notification
+        } else if (_displayTypeMap[osPayload.notificationID]) {
+            type = (OSNotificationDisplayType)[_displayTypeMap[osPayload.notificationID] intValue];
+            completion(type);
+        } else if (_displayDelegate) {
+            NSMutableArray *callbacks = [NSMutableArray new];
+            [callbacks addObject:completion];
+            [_pendingDisplayTypeCallbacks setObject:callbacks forKey:notificationId];
+            
+            NSTimer *watchdogTimer = [NSTimer scheduledTimerWithTimeInterval:CUSTOM_DISPLAY_TYPE_TIMEOUT
+                                                                      target:self
+                                                                    selector:@selector(watchdogTimerFired:)
+                                                                    userInfo:notificationId
+                                                                     repeats:false];
+            
+            [_displayDelegate willPresentInFocusNotificationWithPayload:osPayload withCompletion:^(OSNotificationDisplayType displayType) {
+                [OneSignalHelper runOnMainThread:^{
+                    NSMutableArray<OSNotificationDisplayTypeResponse> *callbacks = _pendingDisplayTypeCallbacks[notificationId];
+                    
+                    if (!callbacks || callbacks.count == 0)
+                        return;
+                    
+                    [watchdogTimer invalidate];
+                    [_pendingDisplayTypeCallbacks removeObjectForKey:notificationId];
+                    _displayTypeMap[notificationId] = @((int)displayType);
+                    
+                    for (OSNotificationDisplayTypeResponse callback in callbacks)
+                        callback(displayType);
+                }];
+            }];
+        } else {
+            // No delegate is set; uses the main display type set with OneSignal.setInFocusDisplayType()
+            _displayTypeMap[notificationId] = @((int)type);
+            completion(type);
+        }
+    }];
+}
+
+// If this is called, it means OSNotificationDisplayTypeDelegate did not execute the callback
+// within the max time range, and timed out. We must display the notification anyways
+// using the default display type to avoid dropping notifications.
++ (void)watchdogTimerFired:(NSTimer *)timer {
+    NSString *notificationId = (NSString *)timer.userInfo;
+    NSMutableArray<OSNotificationDisplayTypeResponse> *callbacks = _pendingDisplayTypeCallbacks[notificationId];
+    
+    // Check just in case the app called the callback just as this timer fired
+    if (!callbacks || callbacks.count == 0)
+        return;
+    
+    [_pendingDisplayTypeCallbacks removeObjectForKey:notificationId];
+    
+    _displayTypeMap[notificationId] = @(_inFocusDisplayType);
+    
+    for (OSNotificationDisplayTypeResponse completion in callbacks)
+        completion(_inFocusDisplayType);
+}
+
 // Entry point for the following:
 //  - 1. (iOS all) - Opening notifications
 //  - 2. Notification received
@@ -1774,17 +1873,22 @@ static NSString *_lastnonActiveMessageId;
         if (newId)
             _lastAppActiveMessageId = newId;
         
-        let inAppAlert = (self.inFocusDisplayType == OSNotificationDisplayTypeInAppAlert);
-        
-        // Make sure it is not a silent one do display, if inAppAlerts are enabled
-        if (inAppAlert && ![OneSignalHelper isRemoteSilentNotification:messageDict]) {
-            [OneSignalAlertView showInAppAlert:messageDict];
-            return;
-        }
-        
-        // App is active and a notification was received without inApp display. Display type is none or notification
-        // Call Received Block
-        [OneSignalHelper handleNotificationReceived:self.inFocusDisplayType];
+        [self displayTypeForNotificationPayload:messageDict withCompletion:^(OSNotificationDisplayType displayType) {
+            let inAppAlert = (displayType == OSNotificationDisplayTypeInAppAlert);
+            
+            // Make sure it is not a silent one do display, if inAppAlerts are enabled
+            if (inAppAlert && ![OneSignalHelper isRemoteSilentNotification:messageDict]) {
+                [OneSignalAlertView showInAppAlert:messageDict];
+                return;
+            }
+            
+            // App is active and a notification was received without inApp display. Display type is none or notification
+            // Call Received Block
+            [OneSignalHelper handleNotificationReceived:displayType];
+            
+            if (opened)
+                [self openedNotificationWithDisplayType:displayType withPayload:messageDict isActive:isActive];
+        }];
     } else {
         // Prevent duplicate calls
         let newId = [self checkForProcessedDups:customDict lastMessageId:_lastnonActiveMessageId];
@@ -1792,18 +1896,21 @@ static NSString *_lastnonActiveMessageId;
             return;
         if (newId)
             _lastnonActiveMessageId = newId;
+        
+        if (opened)
+            [self openedNotificationWithDisplayType:OneSignal.inFocusDisplayType withPayload:messageDict isActive:isActive];
     }
+}
+
++ (void)openedNotificationWithDisplayType:(OSNotificationDisplayType)displayType withPayload:(NSDictionary *)payload isActive:(BOOL)isActive {
+    //app was in background / not running and opened due to a tap on a notification or an action check what type
+    OSNotificationActionType type = OSNotificationActionTypeOpened;
     
-    if (opened) {
-        //app was in background / not running and opened due to a tap on a notification or an action check what type
-        OSNotificationActionType type = OSNotificationActionTypeOpened;
-        
-        if (messageDict[@"custom"][@"a"][@"actionSelected"] || messageDict[@"actionSelected"])
-            type = OSNotificationActionTypeActionTaken;
-        
-        // Call Action Block
-        [OneSignal handleNotificationOpened:messageDict isActive:isActive actionType:type displayType:OneSignal.inFocusDisplayType];
-    }
+    if (payload[@"custom"][@"a"][@"actionSelected"] || payload[@"actionSelected"])
+        type = OSNotificationActionTypeActionTaken;
+    
+    // Call Action Block
+    [OneSignal handleNotificationOpened:payload isActive:isActive actionType:type displayType:displayType];
 }
 
 + (NSString*) checkForProcessedDups:(NSDictionary*)customDict lastMessageId:(NSString*)lastMessageId {
@@ -1977,18 +2084,22 @@ static NSString *_lastnonActiveMessageId;
         [self fireIdsAvailableCallback];
 }
 
-+ (void)didRegisterForRemoteNotifications:(UIApplication*)app deviceToken:(NSData*)inDeviceToken {
++ (void)didRegisterForRemoteNotifications:(UIApplication *)app
+                              deviceToken:(NSData *)inDeviceToken {
     if ([OneSignal shouldLogMissingPrivacyConsentErrorWithMethodName:nil])
         return;
-    
-    let trimmedDeviceToken = [[inDeviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
-    let parsedDeviceToken = [[trimmedDeviceToken componentsSeparatedByString:@" "] componentsJoinedByString:@""];
-    
-    
+
+    let parsedDeviceToken = [NSString hexStringFromData:inDeviceToken];
+
     [OneSignal onesignal_Log:ONE_S_LL_INFO message: [NSString stringWithFormat:@"Device Registered with Apple: %@", parsedDeviceToken]];
+
+    if (!parsedDeviceToken) {
+        [OneSignal onesignal_Log:ONE_S_LL_ERROR message:@"Unable to convert APNS device token to a string"];
+        return;
+    }
     
     waitingForApnsResponse = false;
-    
+
     if (!app_id)
         return;
     

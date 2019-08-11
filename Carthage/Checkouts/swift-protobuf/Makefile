@@ -280,8 +280,7 @@ install: build
 	${INSTALL} ${PROTOC_GEN_SWIFT} ${BINDIR}
 
 clean:
-	-swift build --clean
-	-swift package clean
+	swift package clean
 	rm -rf .build _test ${PROTOC_GEN_SWIFT} DescriptorTestData.bin \
 	  Performance/_generated Performance/_results Protos/mined_words.txt \
 	  docs build
@@ -409,10 +408,10 @@ Tests/SwiftProtobufPluginLibraryTests/DescriptorTestData.swift: build ${PROTOC_G
 	@rm -f $@
 	@echo '// See Makefile how this is generated.' >> $@
 	@echo 'import Foundation' >> $@
-	@echo 'let fileDesciptorSetBytes: [UInt8] = [' >> $@
+	@echo 'let fileDescriptorSetBytes: [UInt8] = [' >> $@
 	@xxd -i < DescriptorTestData.bin >> $@
 	@echo ']' >> $@
-	@echo 'let fileDesciptorSetData = Data(bytes: fileDesciptorSetBytes)' >> $@
+	@echo 'let fileDescriptorSetData = Data(fileDescriptorSetBytes)' >> $@
 
 #
 # Collect a list of words that appear in the SwiftProtobuf library
