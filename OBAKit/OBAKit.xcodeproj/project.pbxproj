@@ -329,6 +329,24 @@
 		93FF488820EF53C4009CFF13 /* OBAGenericNavigationTarget.m in Sources */ = {isa = PBXBuildFile; fileRef = 93FF488620EF53C4009CFF13 /* OBAGenericNavigationTarget.m */; };
 		93FFA5FA1F88305300EA8008 /* OBAArrivalAndDepartureSectionBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 93FFA5F81F88305300EA8008 /* OBAArrivalAndDepartureSectionBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		93FFA5FB1F88305300EA8008 /* OBAArrivalAndDepartureSectionBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 93FFA5F91F88305300EA8008 /* OBAArrivalAndDepartureSectionBuilder.m */; };
+		CC21A0A522FF476A00514A7B /* OBACoreDataDAO.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC21A0A422FF476A00514A7B /* OBACoreDataDAO.swift */; };
+		CC317F1322FF73DA00DACA28 /* cd_OBAStop.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC317F1222FF73DA00DACA28 /* cd_OBAStop.swift */; };
+		CC317F1822FF759600DACA28 /* OBAWebService+Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC317F1722FF759600DACA28 /* OBAWebService+Endpoints.swift */; };
+		CC317F1A22FF763C00DACA28 /* OBAWebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC317F1922FF763C00DACA28 /* OBAWebService.swift */; };
+		CC317F1C22FF76E000DACA28 /* CodingUserInfoKey+CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC317F1B22FF76E000DACA28 /* CodingUserInfoKey+CoreData.swift */; };
+		CC317F1E22FF790F00DACA28 /* OBAManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC317F1D22FF790F00DACA28 /* OBAManagedObject.swift */; };
+		CC317F2022FF79B300DACA28 /* OBAWebService+EndpointsCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC317F1F22FF79B300DACA28 /* OBAWebService+EndpointsCoreData.swift */; };
+		CC317F2222FF7FFF00DACA28 /* OBAKit.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = CC317F2122FF7FFF00DACA28 /* OBAKit.xcdatamodel */; };
+		CC317F2422FF80DA00DACA28 /* cd_OBARoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC317F2322FF80DA00DACA28 /* cd_OBARoute.swift */; };
+		CC317F2622FF813A00DACA28 /* OBARegionBounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC317F2522FF813900DACA28 /* OBARegionBounds.swift */; };
+		CC317F2822FF814E00DACA28 /* cd_OBARegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC317F2722FF814E00DACA28 /* cd_OBARegion.swift */; };
+		CC3D896122FF82C30027476D /* cd_OBAAgency.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3D896022FF82C30027476D /* cd_OBAAgency.swift */; };
+		CC3D896322FF90600027476D /* OBAWebService+Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3D896222FF90600027476D /* OBAWebService+Cache.swift */; };
+		CC3D896522FF92200027476D /* OBAWebService+Fetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3D896422FF92200027476D /* OBAWebService+Fetch.swift */; };
+		CC3D896722FF92740027476D /* OBAStructuredResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3D896622FF92740027476D /* OBAStructuredResponse.swift */; };
+		CC3D896922FF92AA0027476D /* Codable+AnyKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3D896822FF92AA0027476D /* Codable+AnyKey.swift */; };
+		CC3D896B22FF92D90027476D /* OBAReferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3D896A22FF92D90027476D /* OBAReferences.swift */; };
+		CC3D896D22FFCEB70027476D /* OBAWebService+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3D896C22FFCEB70027476D /* OBAWebService+Codable.swift */; };
 		CCD30CFB1E30564600080EFF /* OBAHandoff.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD30CFA1E30564600080EFF /* OBAHandoff.swift */; };
 /* End PBXBuildFile section */
 
@@ -672,6 +690,24 @@
 		93FF488620EF53C4009CFF13 /* OBAGenericNavigationTarget.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OBAGenericNavigationTarget.m; sourceTree = "<group>"; };
 		93FFA5F81F88305300EA8008 /* OBAArrivalAndDepartureSectionBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBAArrivalAndDepartureSectionBuilder.h; sourceTree = "<group>"; };
 		93FFA5F91F88305300EA8008 /* OBAArrivalAndDepartureSectionBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OBAArrivalAndDepartureSectionBuilder.m; sourceTree = "<group>"; };
+		CC21A0A422FF476A00514A7B /* OBACoreDataDAO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBACoreDataDAO.swift; sourceTree = "<group>"; };
+		CC317F1222FF73DA00DACA28 /* cd_OBAStop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cd_OBAStop.swift; sourceTree = "<group>"; };
+		CC317F1722FF759600DACA28 /* OBAWebService+Endpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OBAWebService+Endpoints.swift"; sourceTree = "<group>"; };
+		CC317F1922FF763C00DACA28 /* OBAWebService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBAWebService.swift; sourceTree = "<group>"; };
+		CC317F1B22FF76E000DACA28 /* CodingUserInfoKey+CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CodingUserInfoKey+CoreData.swift"; sourceTree = "<group>"; };
+		CC317F1D22FF790F00DACA28 /* OBAManagedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBAManagedObject.swift; sourceTree = "<group>"; };
+		CC317F1F22FF79B300DACA28 /* OBAWebService+EndpointsCoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OBAWebService+EndpointsCoreData.swift"; sourceTree = "<group>"; };
+		CC317F2122FF7FFF00DACA28 /* OBAKit.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = OBAKit.xcdatamodel; sourceTree = "<group>"; };
+		CC317F2322FF80DA00DACA28 /* cd_OBARoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cd_OBARoute.swift; sourceTree = "<group>"; };
+		CC317F2522FF813900DACA28 /* OBARegionBounds.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OBARegionBounds.swift; sourceTree = "<group>"; };
+		CC317F2722FF814E00DACA28 /* cd_OBARegion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cd_OBARegion.swift; sourceTree = "<group>"; };
+		CC3D896022FF82C30027476D /* cd_OBAAgency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cd_OBAAgency.swift; sourceTree = "<group>"; };
+		CC3D896222FF90600027476D /* OBAWebService+Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OBAWebService+Cache.swift"; sourceTree = "<group>"; };
+		CC3D896422FF92200027476D /* OBAWebService+Fetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OBAWebService+Fetch.swift"; sourceTree = "<group>"; };
+		CC3D896622FF92740027476D /* OBAStructuredResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBAStructuredResponse.swift; sourceTree = "<group>"; };
+		CC3D896822FF92AA0027476D /* Codable+AnyKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+AnyKey.swift"; sourceTree = "<group>"; };
+		CC3D896A22FF92D90027476D /* OBAReferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBAReferences.swift; sourceTree = "<group>"; };
+		CC3D896C22FFCEB70027476D /* OBAWebService+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OBAWebService+Codable.swift"; sourceTree = "<group>"; };
 		CCD30CFA1E30564600080EFF /* OBAHandoff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OBAHandoff.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -877,6 +913,8 @@
 				93A6E9E11F5BC18B00AFA61C /* AppInterop.swift */,
 				9385BEDA1FB040B300D122D1 /* OBAErrorMessages.h */,
 				9385BEDB1FB040B300D122D1 /* OBAErrorMessages.m */,
+				CC317F1B22FF76E000DACA28 /* CodingUserInfoKey+CoreData.swift */,
+				CC3D896822FF92AA0027476D /* Codable+AnyKey.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -909,6 +947,7 @@
 				934195851DB0B099004BBBB7 /* annotations */,
 				9341958E1DB0B099004BBBB7 /* dao */,
 				934195941DB0B099004BBBB7 /* json_digester */,
+				CC317F1122FF73C000DACA28 /* managed */,
 				934195AA1DB0B099004BBBB7 /* unmanaged */,
 			);
 			path = Models;
@@ -932,6 +971,7 @@
 		9341958E1DB0B099004BBBB7 /* dao */ = {
 			isa = PBXGroup;
 			children = (
+				CC21A0A422FF476A00514A7B /* OBACoreDataDAO.swift */,
 				9341958F1DB0B099004BBBB7 /* OBAModelDAO.h */,
 				934195901DB0B099004BBBB7 /* OBAModelDAO.m */,
 				934195911DB0B099004BBBB7 /* OBAModelDAOUserPreferencesImpl.h */,
@@ -969,6 +1009,9 @@
 		934195AA1DB0B099004BBBB7 /* unmanaged */ = {
 			isa = PBXGroup;
 			children = (
+				CC317F2522FF813900DACA28 /* OBARegionBounds.swift */,
+				CC3D896622FF92740027476D /* OBAStructuredResponse.swift */,
+				CC3D896A22FF92D90027476D /* OBAReferences.swift */,
 				934C50A71E2B6D2700DFDCA0 /* OBAAlarm.h */,
 				934C50A81E2B6D2700DFDCA0 /* OBAAlarm.m */,
 				934195AB1DB0B099004BBBB7 /* OBAAgencyV2.h */,
@@ -1058,6 +1101,7 @@
 		934196981DB0B0AF004BBBB7 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				CC21A0A822FF54B700514A7B /* core_data */,
 				933BC22C2033CC0E00267965 /* OBAMapDataLoader.h */,
 				933BC22B2033CC0E00267965 /* OBAMapDataLoader.m */,
 				9341969C1DB0B0AF004BBBB7 /* OBADataSourceConfig.h */,
@@ -1252,6 +1296,40 @@
 				93FF1AB01EC39270006C883D /* OBALogging.m */,
 			);
 			path = Logging;
+			sourceTree = "<group>";
+		};
+		CC21A0A822FF54B700514A7B /* core_data */ = {
+			isa = PBXGroup;
+			children = (
+				CC317F1622FF758600DACA28 /* OBAWebService */,
+			);
+			path = core_data;
+			sourceTree = "<group>";
+		};
+		CC317F1122FF73C000DACA28 /* managed */ = {
+			isa = PBXGroup;
+			children = (
+				CC317F2122FF7FFF00DACA28 /* OBAKit.xcdatamodel */,
+				CC317F1222FF73DA00DACA28 /* cd_OBAStop.swift */,
+				CC317F2322FF80DA00DACA28 /* cd_OBARoute.swift */,
+				CC317F2722FF814E00DACA28 /* cd_OBARegion.swift */,
+				CC3D896022FF82C30027476D /* cd_OBAAgency.swift */,
+				CC317F1D22FF790F00DACA28 /* OBAManagedObject.swift */,
+			);
+			path = managed;
+			sourceTree = "<group>";
+		};
+		CC317F1622FF758600DACA28 /* OBAWebService */ = {
+			isa = PBXGroup;
+			children = (
+				CC317F1922FF763C00DACA28 /* OBAWebService.swift */,
+				CC3D896C22FFCEB70027476D /* OBAWebService+Codable.swift */,
+				CC3D896422FF92200027476D /* OBAWebService+Fetch.swift */,
+				CC3D896222FF90600027476D /* OBAWebService+Cache.swift */,
+				CC317F1722FF759600DACA28 /* OBAWebService+Endpoints.swift */,
+				CC317F1F22FF79B300DACA28 /* OBAWebService+EndpointsCoreData.swift */,
+			);
+			path = OBAWebService;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1525,7 +1603,9 @@
 				93A6E9E21F5BC18B00AFA61C /* AppInterop.swift in Sources */,
 				9341968B1DB0B099004BBBB7 /* OBATripScheduleV2.m in Sources */,
 				9358CDB31DEA242B00132CDE /* OBAUpcomingDeparture.m in Sources */,
+				CC3D896522FF92200027476D /* OBAWebService+Fetch.swift in Sources */,
 				934196011DB0B099004BBBB7 /* OBACommon.m in Sources */,
+				CC317F2022FF79B300DACA28 /* OBAWebService+EndpointsCoreData.swift in Sources */,
 				934196811DB0B099004BBBB7 /* OBAStopPreferencesV2.m in Sources */,
 				93EA5A40203DF41B00CE6CAC /* OBAAlarmNavigationTarget.m in Sources */,
 				934196831DB0B099004BBBB7 /* OBAStopsForRouteV2.m in Sources */,
@@ -1534,9 +1614,11 @@
 				9341962D1DB0B099004BBBB7 /* OBAVehicleMapAnnotation.m in Sources */,
 				9341963E1DB0B099004BBBB7 /* OBASetDatePropertyJsonDigesterRule.m in Sources */,
 				9341B82E20B69327006450FC /* CardWrapper.swift in Sources */,
+				CC317F2622FF813A00DACA28 /* OBARegionBounds.swift in Sources */,
 				9341968F1DB0B099004BBBB7 /* OBATripStopTimeV2.m in Sources */,
 				934196731DB0B099004BBBB7 /* OBARouteV2.m in Sources */,
 				9341966C1DB0B099004BBBB7 /* OBARegionV2.m in Sources */,
+				CC317F2422FF80DA00DACA28 /* cd_OBARoute.swift in Sources */,
 				931A6A261E02772E00131242 /* OBAValue1ContentsView.m in Sources */,
 				934195F91DB0B099004BBBB7 /* NSArray+OBAAdditions.m in Sources */,
 				9388C2B61FFEAA4B0068041F /* PopoverPresenter.swift in Sources */,
@@ -1554,6 +1636,7 @@
 				9341961B1DB0B099004BBBB7 /* OBAUser.m in Sources */,
 				93089DA81F87E7FC00694A90 /* OBADepartureRow.m in Sources */,
 				9341961F1DB0B099004BBBB7 /* OBAMapRegionManager.m in Sources */,
+				CC317F1322FF73DA00DACA28 /* cd_OBAStop.swift in Sources */,
 				9385BED71FAFA07D00D122D1 /* PromisedModelService.swift in Sources */,
 				93681B9A2122952700293165 /* OBAButtonBarRow.m in Sources */,
 				934196621DB0B099004BBBB7 /* OBANavigationTarget.m in Sources */,
@@ -1573,6 +1656,7 @@
 				9341964C1DB0B099004BBBB7 /* OBAArrivalAndDepartureInstanceRef.m in Sources */,
 				9341960F1DB0B099004BBBB7 /* OBAMapHelpers.m in Sources */,
 				934196361DB0B099004BBBB7 /* OBACreateObjectJsonDigesterRule.m in Sources */,
+				CC317F2822FF814E00DACA28 /* cd_OBARegion.swift in Sources */,
 				93302B5220CB5A36003699C6 /* gtfs-realtime.pb.swift in Sources */,
 				934196791DB0B099004BBBB7 /* OBAServiceAlertsModel.m in Sources */,
 				934196541DB0B099004BBBB7 /* OBABookmarkV2.m in Sources */,
@@ -1584,6 +1668,7 @@
 				932CE84A20263ED6003091D3 /* OBABookmarkedRouteLoadingCell.m in Sources */,
 				93089D9F1F87E6B900694A90 /* OBABaseRow.m in Sources */,
 				932CE85220263FFB003091D3 /* OBABaseTableCell.m in Sources */,
+				CC317F1A22FF763C00DACA28 /* OBAWebService.swift in Sources */,
 				934196B31DB0B0AF004BBBB7 /* OBAModelFactory.m in Sources */,
 				9341961D1DB0B099004BBBB7 /* OBALocationManager.m in Sources */,
 				935C391A1F772CE300737DC4 /* NSString+OBAAdditions.m in Sources */,
@@ -1592,6 +1677,7 @@
 				934196111DB0B099004BBBB7 /* OBAReachability.m in Sources */,
 				9341968D1DB0B099004BBBB7 /* OBATripStatusV2.m in Sources */,
 				934196B71DB0B0AF004BBBB7 /* OBAModelServiceRequest.m in Sources */,
+				CC3D896322FF90600027476D /* OBAWebService+Cache.swift in Sources */,
 				93D5F3671FF1900700800132 /* OBAURLRequest.swift in Sources */,
 				93FF1AB21EC39270006C883D /* OBALogging.m in Sources */,
 				93E592971F8CA6870079A2D8 /* OBATableViewCell.m in Sources */,
@@ -1622,6 +1708,7 @@
 				934196291DB0B099004BBBB7 /* OBATripContinuationMapAnnotation.m in Sources */,
 				936EB1BA1E91A83700F4F3A7 /* OBARegionStorage.m in Sources */,
 				934196BB1DB0B0AF004BBBB7 /* OBAUIBuilder.m in Sources */,
+				CC3D896B22FF92D90027476D /* OBAReferences.swift in Sources */,
 				934196851DB0B099004BBBB7 /* OBAStopV2.m in Sources */,
 				9341967B1DB0B099004BBBB7 /* OBASituationConsequenceV2.m in Sources */,
 				938956FD215C3F03008AB975 /* RegionsService.swift in Sources */,
@@ -1658,18 +1745,27 @@
 				934196771DB0B099004BBBB7 /* OBASearchResult.m in Sources */,
 				934196381DB0B099004BBBB7 /* OBAJsonDigester.m in Sources */,
 				930AFE9F1DD183720092AE82 /* OBAWalkingDirections.m in Sources */,
+				CC3D896722FF92740027476D /* OBAStructuredResponse.swift in Sources */,
+				CC21A0A522FF476A00514A7B /* OBACoreDataDAO.swift in Sources */,
 				934196AF1DB0B0AF004BBBB7 /* OBADataSourceConfig.m in Sources */,
 				93A632E321D561A900A1AC9B /* UIImage+OBAAdditions.m in Sources */,
 				9341964E1DB0B099004BBBB7 /* OBAArrivalAndDepartureV2.m in Sources */,
+				CC317F1822FF759600DACA28 /* OBAWebService+Endpoints.swift in Sources */,
+				CC3D896922FF92AA0027476D /* Codable+AnyKey.swift in Sources */,
 				934196421DB0B099004BBBB7 /* OBASetNextOBAJsonDigesterRule.m in Sources */,
 				CCD30CFB1E30564600080EFF /* OBAHandoff.swift in Sources */,
+				CC317F2222FF7FFF00DACA28 /* OBAKit.xcdatamodel in Sources */,
 				932CE84E20263F0C003091D3 /* OBABookmarkedRouteErrorCell.m in Sources */,
+				CC3D896122FF82C30027476D /* cd_OBAAgency.swift in Sources */,
+				CC317F1C22FF76E000DACA28 /* CodingUserInfoKey+CoreData.swift in Sources */,
 				934196D41DB0C02F004BBBB7 /* NSDate+DateTools.m in Sources */,
 				9341965D1DB0B099004BBBB7 /* OBAHasReferencesV2.m in Sources */,
 				93E65960204098FB00053B7C /* OBAExtendedNavBarView.m in Sources */,
 				934196441DB0B099004BBBB7 /* OBASetPropertyJsonDigesterRule.m in Sources */,
 				9341966E1DB0B099004BBBB7 /* OBAReportProblemWithStopV2.m in Sources */,
+				CC317F1E22FF790F00DACA28 /* OBAManagedObject.swift in Sources */,
 				93E103A12134D5E30090E7AF /* GrabHandle.swift in Sources */,
+				CC3D896D22FFCEB70027476D /* OBAWebService+Codable.swift in Sources */,
 				934196B51DB0B0AF004BBBB7 /* OBAModelService.m in Sources */,
 				93113206214D9D450063D400 /* ForecastManager.swift in Sources */,
 				93FFA5FB1F88305300EA8008 /* OBAArrivalAndDepartureSectionBuilder.m in Sources */,

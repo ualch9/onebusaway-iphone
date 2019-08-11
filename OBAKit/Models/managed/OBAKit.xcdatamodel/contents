@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14886.2" systemVersion="19A526h" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CD_OBAAgency" representedClassName="CD_OBAAgency" syncable="YES">
+        <attribute name="disclaimer" optional="YES" attributeType="String"/>
+        <attribute name="identifier" attributeType="String"/>
+        <attribute name="name" attributeType="String" defaultValueString="Untitled Agency"/>
+        <attribute name="url" optional="YES" attributeType="String" defaultValueString="http://example.com"/>
+        <relationship name="region" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_OBARegion" inverseName="agencies" inverseEntity="CD_OBARegion"/>
+        <relationship name="routes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_OBARoute" inverseName="agency" inverseEntity="CD_OBARoute"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="identifier"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CD_OBAAlarm" representedClassName="CD_OBAAlarm" syncable="YES" codeGenerationType="class">
+        <attribute name="alarmURL" optional="YES" attributeType="String"/>
+        <attribute name="estimatedDeparture" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="scheduledDeparture" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="serviceDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="timeIntervalBeforeDeparture" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="vehicleID" optional="YES" attributeType="String"/>
+        <relationship name="stop" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_OBAStop" inverseName="alarms" inverseEntity="CD_OBAStop"/>
+    </entity>
+    <entity name="CD_OBABookmark" representedClassName="CD_OBABookmark" syncable="YES">
+        <attribute name="bookmarkVersion" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String" defaultValueString="Untitled Bookmark"/>
+        <attribute name="routeID" optional="YES" attributeType="String"/>
+        <attribute name="routeShortName" optional="YES" attributeType="String"/>
+        <attribute name="sortOrder" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="stopID" optional="YES" attributeType="String"/>
+        <attribute name="tripHeadsign" optional="YES" attributeType="String"/>
+        <relationship name="region" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_OBARegion" inverseName="bookmarks" inverseEntity="CD_OBARegion"/>
+        <relationship name="stop" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_OBAStop" inverseName="bookmarks" inverseEntity="CD_OBAStop"/>
+    </entity>
+    <entity name="CD_OBARegion" representedClassName="CD_OBARegion" syncable="YES">
+        <attribute name="contactEmail" optional="YES" attributeType="String"/>
+        <attribute name="facebookURL" optional="YES" attributeType="String"/>
+        <attribute name="identifier" attributeType="String"/>
+        <attribute name="isActive" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="isCustom" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isExperimental" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="language" optional="YES" attributeType="String"/>
+        <attribute name="obaBaseURL" optional="YES" attributeType="String"/>
+        <attribute name="paymentAppStoreIdentifier" optional="YES" attributeType="String"/>
+        <attribute name="paymentAppURLScheme" optional="YES" attributeType="String"/>
+        <attribute name="paymentWarningBody" optional="YES" attributeType="String"/>
+        <attribute name="paymentWarningTitle" optional="YES" attributeType="String"/>
+        <attribute name="regionBounds" attributeType="Binary"/>
+        <attribute name="regionName" attributeType="String" defaultValueString="Untitled Region"/>
+        <attribute name="siriBaseURL" optional="YES" attributeType="String"/>
+        <attribute name="supportsOBADiscoveryAPIs" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="supportsOBARealtimeAPIs" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="supportsSiriRealtimeAPIs" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="twitterURL" optional="YES" attributeType="String"/>
+        <relationship name="agencies" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_OBAAgency" inverseName="region" inverseEntity="CD_OBAAgency"/>
+        <relationship name="bookmarks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_OBABookmark" inverseName="region" inverseEntity="CD_OBABookmark"/>
+        <relationship name="stops" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_OBAStop" inverseName="region" inverseEntity="CD_OBAStop"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="identifier"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CD_OBARoute" representedClassName="CD_OBARoute" syncable="YES">
+        <attribute name="identifier" optional="YES" attributeType="String"/>
+        <attribute name="longName" attributeType="String" defaultValueString="Untitled Stop"/>
+        <attribute name="routeID" attributeType="String" defaultValueString="xxxx"/>
+        <attribute name="routeType" optional="YES" attributeType="Integer 16" defaultValueString="999" usesScalarValueType="YES"/>
+        <attribute name="shortName" optional="YES" attributeType="String"/>
+        <relationship name="agency" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_OBAAgency" inverseName="routes" inverseEntity="CD_OBAAgency"/>
+        <relationship name="stops" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_OBAStop" inverseName="routes" inverseEntity="CD_OBAStop"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="identifier"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CD_OBAStop" representedClassName="CD_OBAStop" syncable="YES">
+        <attribute name="code" optional="YES" attributeType="String"/>
+        <attribute name="direction" optional="YES" attributeType="String"/>
+        <attribute name="identifier" optional="YES" attributeType="String"/>
+        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="routeIDs" optional="YES" attributeType="Transformable" valueTransformerName="" customClassName="NSArray"/>
+        <relationship name="alarms" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_OBAAlarm" inverseName="stop" inverseEntity="CD_OBAAlarm"/>
+        <relationship name="bookmarks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_OBABookmark" inverseName="stop" inverseEntity="CD_OBABookmark"/>
+        <relationship name="region" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_OBARegion" inverseName="stops" inverseEntity="CD_OBARegion"/>
+        <relationship name="routes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_OBARoute" inverseName="stops" inverseEntity="CD_OBARoute"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="identifier"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <elements>
+        <element name="CD_OBAAgency" positionX="-48.53125" positionY="106.37890625" width="128" height="133"/>
+        <element name="CD_OBAAlarm" positionX="-199.4375" positionY="-123.95703125" width="128" height="148"/>
+        <element name="CD_OBABookmark" positionX="160" positionY="192" width="128" height="178"/>
+        <element name="CD_OBARegion" positionX="160" positionY="192" width="128" height="373"/>
+        <element name="CD_OBARoute" positionX="160" positionY="192" width="128" height="148"/>
+        <element name="CD_OBAStop" positionX="307.47265625" positionY="172.8359375" width="128" height="208"/>
+    </elements>
+</model>
