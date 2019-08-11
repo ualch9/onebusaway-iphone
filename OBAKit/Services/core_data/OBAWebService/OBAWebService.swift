@@ -10,30 +10,38 @@ import Foundation
 import CoreData
 
 public class OBAWebService {
-	public static let shared = OBAWebService()
-	public static let baseURL = URL(string: "http://api.onebusaway.org/api")!
-	
-	public fileprivate(set) var cache: Cache
-	
 	// MARK: - Decoders
 	internal let decoder: JSONDecoder
 	
-	// TODO: Make this an environment variable instead
-	static let apiKey = "org.onebusaway.iphone"
-
 	// MARK: - API Arguments
-	public var currentRegion: CD_OBARegion? = nil
-	public fileprivate(set) var workingContext: NSManagedObjectContext
+	public var currentRegion: CD_OBARegion? = nil {
+		didSet {
+			Notifications.didChangeRegion.post()
+		}
+	}
 	
+	public static let baseURL = URL(string: "http://api.onebusaway.org/api")!
+	
+	static let apiKey = "org.onebusaway.iphone"		// TODO: Make this an environment variable instead
+	
+	// MARK: - Core Data
+	public fileprivate(set) var cache: Cache
+	
+	public fileprivate(set) var workingContext: NSManagedObjectContext
+	public var viewContext: NSManagedObjectContext { return self.cache.container.viewContext }
+	
+	// MARK: - Initializer
 	internal init() {
 		self.cache = Cache()
 		
 		self.workingContext = self.cache.container.newBackgroundContext()
+		self.workingContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
 		
 		self.decoder = JSONDecoder()
 		self.decoder.userInfo[.context] = workingContext
 	}
 	
+	// MARK: - Networking
 	/// Make a request to the appropriate OneBusAway service.
 	/// - Parameter requestToMake: The API endpoint to call
 	/// - Precondition: `self.currentRegion` is not nil (except if `requestToMake` is `.regions`).

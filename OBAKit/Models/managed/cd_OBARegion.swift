@@ -35,7 +35,7 @@ public class CD_OBARegion: NSManagedObject, OBAManagedObject, Decodable {
 	
 	// MARK: Base properties
 	@NSManaged public var identifier: String
-	@NSManaged fileprivate var regionName: String	// use `name` accessor instead.
+	@NSManaged public var regionName: String
 	@NSManaged public var obaBaseURL: String
 	@NSManaged public var regionBounds: Data		// raw value is a JSON array.
 	
@@ -77,11 +77,6 @@ public class CD_OBARegion: NSManagedObject, OBAManagedObject, Decodable {
 	}
 	
 	// MARK: - Region name
-	public var name: String {
-		get { return self.regionName }
-		set { self.regionName = CD_OBARegion.cleanUpRegionName(newValue) }
-	}
-	
 	static func cleanUpRegionName(_ dirtyRegionName: String) -> String {
 		guard !dirtyRegionName.isEmpty else { return dirtyRegionName }
 		
@@ -119,7 +114,7 @@ public class CD_OBARegion: NSManagedObject, OBAManagedObject, Decodable {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
 		
 		self.identifier = "\(try container.decode(Int.self, forKey: .identifier))"
-		self.name = try container.decode(String.self, forKey: .regionName)
+		self.regionName = CD_OBARegion.cleanUpRegionName(try container.decode(String.self, forKey: .regionName))
 		self.obaBaseURL = try container.decode(String.self, forKey: .obaBaseURL)
 		self.bounds = try container.decode([OBARegionBounds].self, forKey: .regionBounds)
 		

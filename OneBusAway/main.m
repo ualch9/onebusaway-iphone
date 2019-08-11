@@ -14,35 +14,35 @@
  * limitations under the License.
  */
 
-@import UIKit;
-@import OBAKit;
-
-@interface OBATestAppDelegate : UIResponder <UIApplicationDelegate>
-@end
-@implementation OBATestAppDelegate
-@end
-
-int main(int argc, char *argv[]) {
-    @autoreleasepool {
-
-#if DEBUG
-        NSLog(@"Bundle Path: %@", [NSBundle mainBundle].bundlePath);
-        NSLog(@"Caches path: %@", [FileHelpers pathToFileName:@"whatever" inDirectory:NSCachesDirectory]);
-#endif
-
-        NSDictionary *processInfoEnv = [NSProcessInfo processInfo].environment;
-
-        BOOL executingTests = [[processInfoEnv[@"XCInjectBundle"] pathExtension] isEqual:@"xctest"];
-        if (!executingTests) {
-            executingTests = !!processInfoEnv[@"XCInjectBundleInto"];
-        }
-
-        NSString *appDelegateClass = executingTests ? @"OBATestAppDelegate" : @"OBAApplicationDelegate";
-
-        [OBACommon setRunningInsideTests:executingTests];
-
-        int retVal = UIApplicationMain(argc, argv, nil, appDelegateClass);
-        return retVal;
-    }
-}
-
+//@import UIKit;
+//@import OBAKit;
+//
+//@interface OBATestAppDelegate : UIResponder <UIApplicationDelegate>
+//@end
+//@implementation OBATestAppDelegate
+//@end
+//
+//int main(int argc, char *argv[]) {
+//    @autoreleasepool {
+//
+//#if DEBUG
+//        NSLog(@"Bundle Path: %@", [NSBundle mainBundle].bundlePath);
+//        NSLog(@"Caches path: %@", [FileHelpers pathToFileName:@"whatever" inDirectory:NSCachesDirectory]);
+//#endif
+//
+//        NSDictionary *processInfoEnv = [NSProcessInfo processInfo].environment;
+//
+//        BOOL executingTests = [[processInfoEnv[@"XCInjectBundle"] pathExtension] isEqual:@"xctest"];
+//        if (!executingTests) {
+//            executingTests = !!processInfoEnv[@"XCInjectBundleInto"];
+//        }
+//
+//        NSString *appDelegateClass = executingTests ? @"OBATestAppDelegate" : @"OBAApplicationDelegate";
+//
+//        [OBACommon setRunningInsideTests:executingTests];
+//
+//        int retVal = UIApplicationMain(argc, argv, nil, appDelegateClass);
+//        return retVal;
+//    }
+//}
+//

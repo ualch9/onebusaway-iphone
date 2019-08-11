@@ -22,14 +22,14 @@ struct OBAEntryResponse<O: OBAManagedObject>: Decodable {
 	}
 	
 	let entry: O
-	let references: OBAReferences
+	let references: OBAReferences?
 	
 	init(from decoder: Decoder) throws {
 		let root = try decoder.container(keyedBy: AnyKey.self)
 		let data = try root.nestedContainer(keyedBy: CodingKeys.self, forKey: AnyKey(stringValue: "data"))
 		
 		self.entry = try data.decode(O.self, forKey: .entry)
-		self.references = try data.decode(OBAReferences.self, forKey: .references)
+		self.references = try data.decodeIfPresent(OBAReferences.self, forKey: .references)
 	}
 }
 
@@ -48,13 +48,13 @@ struct OBAListResponse<O: OBAManagedObject>: Decodable {
 	}
 	
 	let entries: [O]
-	let references: OBAReferences
+	let references: OBAReferences?
 	
 	init(from decoder: Decoder) throws {
 		let root = try decoder.container(keyedBy: AnyKey.self)
 		let data = try root.nestedContainer(keyedBy: CodingKeys.self, forKey: AnyKey(stringValue: "data"))
 		
 		self.entries = try data.decode([O].self, forKey: .entries)
-		self.references = try data.decode(OBAReferences.self, forKey: .references)
+		self.references = try data.decodeIfPresent(OBAReferences.self, forKey: .references)
 	}
 }

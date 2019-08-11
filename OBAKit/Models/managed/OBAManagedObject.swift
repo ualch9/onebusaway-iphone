@@ -14,14 +14,14 @@ public protocol OBAManagedObject: NSManagedObject, Decodable {
 }
 
 extension OBAManagedObject {
-	static var sortedFetchRequest: NSFetchRequest<Self> {
+	static public var sortedFetchRequest: NSFetchRequest<Self> {
 		let request = fetchedRequest
 		request.sortDescriptors = [NSSortDescriptor(key: "identifier", ascending: true)]
 		
 		return request
 	}
 	
-	static var fetchedRequest: NSFetchRequest<Self> {
+	static public var fetchedRequest: NSFetchRequest<Self> {
 		return NSFetchRequest<Self>(entityName: Self.entityName)
 	}
 	

@@ -10,18 +10,20 @@ import CoreData
 
 extension OBAWebService {
 	public class Cache {
-		static let dbName = "OneBusAway.sqlite"
+		static let dbName = "OBAKit.sqlite"
 		static var sharedAppGroupURL: URL = {
 			return FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.dev.onebusaway.iphone")!
 		}()
 		
-		let container: NSPersistentContainer
+		public let container: NSPersistentContainer
 		
-		public init() {
-			container = NSPersistentContainer(name: "OneBusAway")
+		init() {
+			let mom = NSManagedObjectModel.mergedModel(from: [Bundle(for: OBAWebService.Cache.self)])!
+			container = NSPersistentContainer(name: "OBAKit", managedObjectModel: mom)
 			
 			// Require the container to load before we proceed.
 			let dispatch = DispatchGroup()
+			dispatch.enter()
 			container.loadPersistentStores { (_, error) in
 				if let error = error {
 					print(error)
