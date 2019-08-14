@@ -16,7 +16,12 @@ class OBAApp: UIResponder, UIApplicationDelegate {
 		// Override point for customization after application launch.
 		
 		self.window = UIWindow(frame: UIScreen.main.bounds)
-		self.window?.rootViewController = RegionsViewController()
+		let regionSelection = UINavigationController(rootViewController: RegionsViewController())
+		
+		let pages = UITabBarController()
+		pages.setViewControllers([regionSelection], animated: true)
+		
+		self.window?.rootViewController = pages
 		self.window?.makeKeyAndVisible()
 		
 		return true

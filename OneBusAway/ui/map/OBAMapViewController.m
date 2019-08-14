@@ -527,16 +527,16 @@ static const double kStopsInRegionRefreshDelayOnDrag = 0.1;
 }
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay {
-    if ([overlay isKindOfClass:MKPolyline.class]) {
-        MKPolylineRenderer *renderer = [[MKPolylineRenderer alloc] initWithPolyline:overlay];
-        renderer.fillColor = [UIColor blackColor];
-        renderer.strokeColor = [UIColor blackColor];
-        renderer.lineWidth = 5;
-        return renderer;
-    }
-    else {
+//    if ([overlay isKindOfClass:MKPolyline.class]) {
+//        MKPolylineRenderer *renderer = [[MKPolylineRenderer alloc] initWithPolyline:overlay];
+//        renderer.fillColor = [UIColor blackColor];
+//        renderer.strokeColor = [UIColor blackColor];
+//        renderer.lineWidth = 5;
+//        return renderer;
+//    }
+//    else {
         return [[MKOverlayRenderer alloc] init];
-    }
+//    }
 }
 
 #pragma mark - Actions

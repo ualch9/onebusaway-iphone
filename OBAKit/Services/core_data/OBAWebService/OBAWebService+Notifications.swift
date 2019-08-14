@@ -8,10 +8,10 @@
 
 extension OBAWebService {
 	/// Example usage: `OBAWebService.Notifications.didChangeRegion.name`.
-	enum Notifications {
+	public enum Notifications {
 		case didChangeRegion
-//		case networkDisconnected
-//		case networkConnected
+		case networkDisconnected
+		case networkConnected
 		
 		public var name: Notification.Name {
 			return Notification.Name("OBAWebServiceNotification_\(self)")

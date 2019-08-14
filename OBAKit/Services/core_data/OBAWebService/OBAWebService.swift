@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import os.log
 
 public class OBAWebService {
 	// MARK: - Decoders
@@ -16,12 +17,13 @@ public class OBAWebService {
 	// MARK: - API Arguments
 	public var currentRegion: CD_OBARegion? = nil {
 		didSet {
+			os_log("OBAWebService.currentRegion changed to: %@.", self.currentRegion?.regionName ?? "nil")
 			Notifications.didChangeRegion.post()
 		}
 	}
 	
 	public static let baseURL = URL(string: "http://api.onebusaway.org/api")!
-	
+	fileprivate var reachability = OBAReachability.forInternetConnection()
 	static let apiKey = "org.onebusaway.iphone"		// TODO: Make this an environment variable instead
 	
 	// MARK: - Core Data
@@ -39,6 +41,20 @@ public class OBAWebService {
 		
 		self.decoder = JSONDecoder()
 		self.decoder.userInfo[.context] = workingContext
+		
+		reachability.reachableBlock = { _ in
+			Notifications.networkConnected.post()
+		}
+		
+		reachability.unreachableBlock = { _ in
+			Notifications.networkDisconnected.post()
+		}
+		
+		reachability.startNotifier()
+	}
+	
+	deinit {
+		reachability.stopNotifier()
 	}
 	
 	// MARK: - Networking
@@ -74,8 +90,19 @@ public class OBAWebService {
 			}
 			
 			components.queryItems = queryArgs
+
+			// In a real life situation, poor connection (e.g. in tunnel) or
+			// 2G speeds can slow down requests. However, for development, this
+			// is for testing offline situations (via Network Link Conditioner).
+			let timeout: TimeInterval
+			#if DEBUG
+				timeout = 5.0
+			#else
+				timeout = 30.0
+			#endif
 			
-			let request = URLRequest(url: components.url!)
+			// Ignore local cache, data must be from online.
+			let request = URLRequest(url: components.url!, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: timeout)
 			
 			URLSession.shared.dataTask(with: request) { (data, response, error) in
 				guard let data = data,

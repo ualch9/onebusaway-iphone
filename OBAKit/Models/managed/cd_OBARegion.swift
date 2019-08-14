@@ -37,7 +37,7 @@ public class CD_OBARegion: NSManagedObject, OBAManagedObject, Decodable {
 	@NSManaged public var identifier: String
 	@NSManaged public var regionName: String
 	@NSManaged public var obaBaseURL: String
-	@NSManaged public var regionBounds: Data		// raw value is a JSON array.
+	@NSManaged public var regionBounds: Data?		// raw value is a JSON array.
 	
 	/// Signifies that this was created in the RegionBuilderViewController
 	@NSManaged public var isCustom: Bool
@@ -54,7 +54,7 @@ public class CD_OBARegion: NSManagedObject, OBAManagedObject, Decodable {
 	// MARK: Optional contact information
 	@NSManaged public var facebookURL: String?
 	@NSManaged public var twitterURL: String?
-	@NSManaged public var contactEmail: String?
+	@NSManaged public var contactEmail: String
 	@NSManaged public var siriBaseURL: String?		 	// Service Interface for Real Time (SIRI)
 	
 	// MARK: Payments
@@ -70,7 +70,8 @@ public class CD_OBARegion: NSManagedObject, OBAManagedObject, Decodable {
 	// TODO: Replace force tries.
 	public var bounds: [OBARegionBounds] {
 		get {
-			return try! JSONDecoder().decode([OBARegionBounds].self, from: self.regionBounds)
+			guard let regionBounds = self.regionBounds else { return [] }
+			return try! JSONDecoder().decode([OBARegionBounds].self, from: regionBounds)
 		} set {
 			self.regionBounds = try! JSONEncoder().encode(newValue)
 		}
@@ -129,7 +130,7 @@ public class CD_OBARegion: NSManagedObject, OBAManagedObject, Decodable {
 		
 		self.facebookURL = try container.decodeIfPresent(String.self, forKey: .facebookURL)
 		self.twitterURL = try container.decodeIfPresent(String.self, forKey: .twitterURL)
-		self.contactEmail = try container.decodeIfPresent(String.self, forKey: .contactEmail)
+		self.contactEmail = try container.decode(String.self, forKey: .contactEmail)
 		self.siriBaseURL = try container.decodeIfPresent(String.self, forKey: .siriBaseURL)
 		
 		self.paymentWarningBody = try container.decodeIfPresent(String.self, forKey: .paymentWarningBody)

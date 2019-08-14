@@ -34,20 +34,20 @@
         <relationship name="stop" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_OBAStop" inverseName="bookmarks" inverseEntity="CD_OBAStop"/>
     </entity>
     <entity name="CD_OBARegion" representedClassName="CD_OBARegion" syncable="YES">
-        <attribute name="contactEmail" optional="YES" attributeType="String"/>
+        <attribute name="contactEmail" attributeType="String" defaultValueString=""/>
         <attribute name="facebookURL" optional="YES" attributeType="String"/>
         <attribute name="identifier" attributeType="String"/>
         <attribute name="isActive" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
         <attribute name="isCustom" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="isExperimental" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="language" optional="YES" attributeType="String"/>
-        <attribute name="obaBaseURL" optional="YES" attributeType="String"/>
+        <attribute name="obaBaseURL" attributeType="String"/>
         <attribute name="paymentAppStoreIdentifier" optional="YES" attributeType="String"/>
         <attribute name="paymentAppURLScheme" optional="YES" attributeType="String"/>
         <attribute name="paymentWarningBody" optional="YES" attributeType="String"/>
         <attribute name="paymentWarningTitle" optional="YES" attributeType="String"/>
-        <attribute name="regionBounds" attributeType="Binary"/>
-        <attribute name="regionName" attributeType="String" defaultValueString="Untitled Region"/>
+        <attribute name="regionBounds" optional="YES" attributeType="Binary"/>
+        <attribute name="regionName" attributeType="String" defaultValueString=" "/>
         <attribute name="siriBaseURL" optional="YES" attributeType="String"/>
         <attribute name="supportsOBADiscoveryAPIs" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="supportsOBARealtimeAPIs" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>

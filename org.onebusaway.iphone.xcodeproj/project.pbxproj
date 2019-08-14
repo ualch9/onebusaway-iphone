@@ -243,6 +243,8 @@
 		CC3D89742300A4D80027476D /* RegionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3D89732300A4D70027476D /* RegionsViewController.swift */; };
 		CC3D89772300A7F10027476D /* OBAFetchedTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3D89762300A7F10027476D /* OBAFetchedTableViewController.swift */; };
 		CC3D89792300B6340027476D /* OBAApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3D89782300B6340027476D /* OBAApp.swift */; };
+		CC3D897D23021FF30027476D /* RegionBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3D897C23021FF30027476D /* RegionBuilderView.swift */; };
+		CC3D897F230223130027476D /* RegionsViewController+CustomRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3D897E230223130027476D /* RegionsViewController+CustomRegion.swift */; };
 		D6575AEC0FEE13CF00D6D987 /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = D6575AEB0FEE13CF00D6D987 /* Entitlements.plist */; };
 /* End PBXBuildFile section */
 
@@ -642,6 +644,8 @@
 		CC3D89732300A4D70027476D /* RegionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionsViewController.swift; sourceTree = "<group>"; };
 		CC3D89762300A7F10027476D /* OBAFetchedTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OBAFetchedTableViewController.swift; sourceTree = "<group>"; };
 		CC3D89782300B6340027476D /* OBAApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OBAApp.swift; path = OneBusAway/OBAApp.swift; sourceTree = "<group>"; };
+		CC3D897C23021FF30027476D /* RegionBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionBuilderView.swift; sourceTree = "<group>"; };
+		CC3D897E230223130027476D /* RegionsViewController+CustomRegion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RegionsViewController+CustomRegion.swift"; sourceTree = "<group>"; };
 		D6575AEB0FEE13CF00D6D987 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Entitlements.plist; path = OneBusAway/Entitlements.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1024,6 +1028,8 @@
 				9341970D1DB0C13F004BBBB7 /* RegionBuilderViewController.swift */,
 				9341970E1DB0C13F004BBBB7 /* RegionListViewController.swift */,
 				CC3D89732300A4D70027476D /* RegionsViewController.swift */,
+				CC3D897E230223130027476D /* RegionsViewController+CustomRegion.swift */,
+				CC3D897C23021FF30027476D /* RegionBuilderView.swift */,
 			);
 			path = regions;
 			sourceTree = "<group>";
@@ -2012,6 +2018,7 @@
 				93656B852105388A009A3524 /* StopAnnotationView.swift in Sources */,
 				934197921DB0C140004BBBB7 /* OBADiversionViewController.m in Sources */,
 				9341B82220B65DF9006450FC /* SelfSizingCollectionCell.swift in Sources */,
+				CC3D897F230223130027476D /* RegionsViewController+CustomRegion.swift in Sources */,
 				939A1A8E21178A81001D5654 /* OBAFarePayments.m in Sources */,
 				93DCEF7220E5AF2F0004E087 /* LabelSectionController.swift in Sources */,
 				934198211DB0C1BA004BBBB7 /* OBATextFieldTableViewCell.m in Sources */,
@@ -2067,6 +2074,7 @@
 				934197961DB0C140004BBBB7 /* OBAStaticTableViewController+Builders.m in Sources */,
 				9327DEF91E023BD400502F06 /* OBAArrivalDepartureRow.m in Sources */,
 				9341979B1DB0C140004BBBB7 /* OBATextFieldCell.m in Sources */,
+				CC3D897D23021FF30027476D /* RegionBuilderView.swift in Sources */,
 				93A637E120A2CDA60005248C /* EmbeddedSectionController.swift in Sources */,
 				934197B21DB0C140004BBBB7 /* OBAStopViewController.m in Sources */,
 				934197B51DB0C140004BBBB7 /* OBAClassicApplicationUI.m in Sources */,
