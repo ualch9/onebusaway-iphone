@@ -36,17 +36,8 @@ public class RegionsViewController: OBAFetchedTableViewController<CD_OBARegion> 
 		NotificationCenter.default.removeObserver(self)
 	}
 	
-	public override func loadData() {
-		self.showActivityIndicator = true
-		CD_OBAModelDAO.shared.webService.fetch(.regions, as: CD_OBARegion.self).then { _ in
-			self.setPrompt(nil)
-		}.catch {
-			self.setPrompt($0.localizedDescription)
-			os_log("Unable to get data: %@", log: .default, type: .error, $0 as NSError)
-		}.always {
-			try! self.fetchedResultsController.performFetch()
-			self.showActivityIndicator = false
-		}
+	public override func loadData() -> Promise<[CD_OBARegion]> {
+		return CD_OBAModelDAO.shared.webService.fetch(.regions, as: CD_OBARegion.self)
 	}
 	
 	@objc func regionDidUpdate() {
@@ -87,7 +78,7 @@ public class RegionsViewController: OBAFetchedTableViewController<CD_OBARegion> 
 	public override func sectionName(for sectionIndexName: String) -> String? {
 		let isCustom = sectionIndexName == "1"
 		if isCustom {
-			return NSLocalizedString("msg_experimental_regions", comment: "")
+			return NSLocalizedString("region_list_controller.experimental_section_title", comment: "")
 		} else {
 			return NSLocalizedString("msg_active_regions", comment: "")
 		}

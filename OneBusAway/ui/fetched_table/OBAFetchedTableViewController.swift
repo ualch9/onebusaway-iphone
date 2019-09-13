@@ -12,37 +12,68 @@ import OBAKit
 import os.log
 
 /// Provide a list template for core data fetched data. This differs from OBAStaticTableViewController in that
-/// it isn't static, this table view updates automatically ("dynamically") as the core data stack updates, preventing stale data.
-/// There are a number of additions that lets the user know if they do not have a network connection.
-/// This view controller uses Generics to ensure type safety. This class is not compatible with Obj-C.
+/// it isn't static, this table view updates automatically ("dynamically") as the core data stack updates, preventing
+/// stale data. Fetching data from a remote sources is expected to occur on a separate background queue,
+/// and automatically merge changes to core data's container view context. This class cannot be used
+/// in Objc because it relies on generics.
 ///
-/// ## Usage
-/// ### Basic
+/// # Directly Initialize
+/// This method of using OBAFetchedTableViewController only works with getting data from the local stack. To
+/// also include fetching from remote, you will need to subclass OBAFetchedTableViewController (see next section).
+///
 /// ```swift
 /// let vc = OBAFetchedTableViewController<OBARegion>()
-/// ```
 ///
-/// The block above is enough to get started. If no explicit `fetchRequest` is provided, it will use the default
-/// to `OBAManagedObject.fetchRequest`.
-///
-/// ### Predicates
-/// ```swift
-/// let vc = OBAFetchedTableViewController<OBARegion>()
+/// // Optional
 /// let fetchRequest = OBARegion.sortedFetchRequest
 /// fetchRequest.predicate = NSPredicate(format: "isActive == YES")
 ///
 /// vc.fetchRequest = fetchRequest
-/// ```
-/// The block above is an example of providing your own fetch request. Note that the entity type of your fetch request
-/// **MUST** match the generic type of `OBAFetchedTableViewController`, this is compiler-enforced.
 ///
-/// ## Configuration
+/// present(vc, animated: true)
+/// ```
+/// If no explicit `fetchRequest` is provided, it will use the default to `OBAManagedObject.fetchRequest`.
+/// Note that the entity type of your fetch request must match the generic type of
+/// `OBAFetchedTableViewController`.
+///
+/// # Subclass OBAFetchedTableViewController
+/// Subclassing is necessary if you want to customize how the table view looks, or you want to provide means
+/// of updating the data from a remote source. The example below only demostrates how to provide a remote source
+/// and a custom fetch request.
+///
+/// ```swift
+/// class RegionsViewController: OBAFetchedTableViewController<OBARegion> {
+///    // Setting `loadData()` is only needed if you want to load data from remote.
+///    override func loadData() -> Promise<OBARegion> {
+///       return OBAModelDAO.shared.webService.fetch(.regions, as: OBARegion.self)
+///    }
+///
+///    // Setting the fetch request is optional, as it can be default to `OBAManagedObject.fetchRequest`.
+///	   override func viewDidLoad() {
+///       let fetchRequest = OBARegion.sortedFetchRequest
+///       fetchRequest.predicate = NSPredicate(format: "isActive == YES")
+///
+///       self.fetchRequest = fetchRequest
+///
+///       // IMPORTANT: SET THE FETCH REQUEST BEFORE CALLING `super.viewDidLoad()`
+///       super.viewDidLoad()
+///    }
+/// }
+/// ```
+///
+/// # Configuration
 /// There are a number of configuration methods you can override to match the appearance and behavior you want. Most
 /// are wrappers of `UITableViewDataSource` and `UITableViewDelegate`, but they also include the corresponding
 /// object as a method parameter, so you don't have to access `fetchedResultsController.object(at:_)` yourself.
 /// Take a look at the headers of this class to see what you should override.
 ///
+/// ** Because this is still under development, I haven't written out configuration docs yet **
+///
 /// For the most part, this view controller works out-of-the-box, but only presents basic information relevant to the fetch request.
+///
+/// # Limitation
+/// - This controller only handles data in the core data stack. Standalone data cannot be represented using
+/// OBAFetchedTableViewController.
 public class OBAFetchedTableViewController<O: OBAManagedObject>: UITableViewController, NSFetchedResultsControllerDelegate {
 	var fetchedResultsController: NSFetchedResultsController<O>!
 	
@@ -66,8 +97,10 @@ public class OBAFetchedTableViewController<O: OBAManagedObject>: UITableViewCont
 		didSet { self.createFetchedResultsController() }
 	}
 	
+	fileprivate var currentLoadingPromise: Promise<[O]>?
+	
 	// MARK: - UI State stuff
-	public var showActivityIndicator: Bool = false {
+	fileprivate var showActivityIndicator: Bool = false {
 		didSet {
 			self.showActivityIndicator ? self.activityIndicator.startAnimating() : self.activityIndicator.stopAnimating()
 			self.navigationController?.setToolbarHidden(!self.showActivityIndicator, animated: true)
@@ -136,7 +169,7 @@ public class OBAFetchedTableViewController<O: OBAManagedObject>: UITableViewCont
 	override public func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
-		self.loadData()
+		self.reloadData()
 	}
 	
 	// MARK: - Overridable configuration methods (bodies below are default implementations)
@@ -159,9 +192,52 @@ public class OBAFetchedTableViewController<O: OBAManagedObject>: UITableViewCont
 		return nil
 	}
 	
-	// default implementation
-	public func loadData() {
-		fatalError("loadData(:_) not implemented.")
+	// MARK: - Loading data from remote
+	/// Override this method to fetch data from remote.
+	/// Load data from remote. You will need to provide the relevant Promise for this method, and the OBAFetchedViewController
+	/// will automatically manage the lifecycle of the Promise.
+	/// 1. This method (`loadData()`) is responsible for providing the Promise that makes the remote request.
+	/// 2. `reloadData()` is responsible for actually performing the remote request.
+	public func loadData() -> Promise<[O]> {
+		// Default implementation: if this method is not overridden, then this method returns any empty array.
+		return Promise(value: [])
+	}
+	
+	/// # !! Do not override this method. !!
+	/// You can call this method anytime to manually reload data from remote.
+	/// This method is responsible for managing the lifecycle of the `loadData()` promise,
+	/// in addition to the corresponding UI elements to indicate loading state.
+	/// - precondition: A loading operation is not in progress when you call this. If you call reloadData
+	/// while a reload operation is pending, it will gracefully ignore your call and let the current pending reload
+	/// operation finish.
+	public func reloadData() {
+		os_log("Called reloadData().", log: .default, type: .info)
+		if let currentLoading = currentLoadingPromise, currentLoading.isPending {
+			os_log("Called reloadData() when a loading operation is pending. We are going to ignore this call and not make another reload operation.", log: .default, type: .error)
+			
+			os_log("reloadData() cancelled.", log: .default, type: .info)
+			return
+		}
+		
+		DispatchQueue.main.async {
+			self.showActivityIndicator = true
+		}
+		
+		self.setPrompt(nil)
+		
+		os_log("reloadData() pending.", log: .default, type: .info)
+		let loadData = self.loadData()
+		loadData.then(on: .main) { _ in
+			self.setPrompt(nil)
+		}.catch(on: .main) {
+			self.setPrompt($0.localizedDescription)
+			os_log("Unable to get data: %@", log: .default, type: .error, $0 as NSError)
+		}.always(on: .main) {
+			try? self.fetchedResultsController.performFetch()
+			self.showActivityIndicator = false
+			os_log("reloadData() resolved.", log: .default, type: .info)
+		}
+		self.currentLoadingPromise = loadData
 	}
 	
 	// default implementation
@@ -176,11 +252,13 @@ public class OBAFetchedTableViewController<O: OBAManagedObject>: UITableViewCont
 	
 	// MARK: - State methods
 	public func setPrompt(_ prompt: String?) {
-		// rdar://43522696 https://openradar.appspot.com/43522696
-		UIView.animate(withDuration: 0.3) {
-			self.navigationController?.setNavigationBarHidden(true, animated: false)
-			self.navigationItem.prompt = prompt
-			self.navigationController?.setNavigationBarHidden(false, animated: false)
+		DispatchQueue.main.async {
+			// rdar://43522696 https://openradar.appspot.com/43522696
+			UIView.animate(withDuration: 0.3) {
+				self.navigationController?.setNavigationBarHidden(true, animated: false)
+				self.navigationItem.prompt = prompt
+				self.navigationController?.setNavigationBarHidden(false, animated: false)
+			}
 		}
 	}
 	
@@ -197,7 +275,7 @@ public class OBAFetchedTableViewController<O: OBAManagedObject>: UITableViewCont
 			self.setPrompt(nil)
 		}
 		
-		self.loadData()
+		self.reloadData()
 	}
 	
 	// MARK: - UITableViewController methods
@@ -207,7 +285,14 @@ public class OBAFetchedTableViewController<O: OBAManagedObject>: UITableViewCont
 	
 	override public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
 		guard let sections = self.fetchedResultsController.sections else { return nil }
-		return sections[section].name
+		let fetchedResultControllerSectionName = sections[section].name
+		
+		/// If the delegate method is overridden (`sectionName(for:_)`), use the section names from that instead.
+		if let configuredSectionName = self.sectionName(for: fetchedResultControllerSectionName) {
+			return configuredSectionName
+		} else {
+			return sections[section].name
+		}
 	}
 	
 	override public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -253,12 +338,31 @@ public class OBAFetchedTableViewController<O: OBAManagedObject>: UITableViewCont
 						   at indexPath: IndexPath?,
 						   for type: NSFetchedResultsChangeType,
 						   newIndexPath: IndexPath?) {
-		
-		switch type {
-		case .insert: 	self.tableView.insertRows(at: [newIndexPath!], with: .automatic)
-		case .update: 	self.tableView.reloadRows(at: [indexPath!], with: .automatic)
-		case .delete:	self.tableView.deleteRows(at: [indexPath!], with: .automatic)
-		case .move:		self.tableView.moveRow(at: indexPath!, to: newIndexPath!)
+		switch (type) {
+		case .insert:
+			if let indexPath = newIndexPath {
+				tableView.insertRows(at: [indexPath], with: .fade)
+			}
+			break
+		case .delete:
+			if let indexPath = indexPath {
+				tableView.deleteRows(at: [indexPath], with: .fade)
+			}
+			break
+		case .update:
+			if let indexPath = indexPath {
+				tableView.reloadRows(at: [indexPath], with: .fade)
+			}
+			break
+		case .move:
+			if let indexPath = indexPath {
+				tableView.deleteRows(at: [indexPath], with: .fade)
+			}
+
+			if let newIndexPath = newIndexPath {
+				tableView.insertRows(at: [newIndexPath], with: .fade)
+			}
+			break
 		@unknown default: fatalError("Unknown case.")
 		}
 	}
