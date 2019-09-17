@@ -102,8 +102,17 @@ public class OBAFetchedTableViewController<O: OBAManagedObject>: UITableViewCont
 	// MARK: - UI State stuff
 	fileprivate var showActivityIndicator: Bool = false {
 		didSet {
-			self.showActivityIndicator ? self.activityIndicator.startAnimating() : self.activityIndicator.stopAnimating()
-			self.navigationController?.setToolbarHidden(!self.showActivityIndicator, animated: true)
+			if loadingDataShouldDisableUserInteraction {
+				if self.showActivityIndicator {
+					self.present(loadingIndicatorAlert, animated: true)
+				} else {
+					guard loadingIndicatorAlert.isBeingPresented else { return }
+					loadingIndicatorAlert.dismiss(animated: true)
+				}
+			} else {
+				self.showActivityIndicator ? self.activityIndicator.startAnimating() : self.activityIndicator.stopAnimating()
+				self.navigationController?.setToolbarHidden(!self.showActivityIndicator, animated: true)
+			}
 		}
 	}
 	
@@ -112,6 +121,23 @@ public class OBAFetchedTableViewController<O: OBAManagedObject>: UITableViewCont
 		view.hidesWhenStopped = true
 		
 		return view
+	}()
+	
+	public var loadingDataShouldDisableUserInteraction: Bool { return false }
+	
+	// MARK: Blocking Loading Indicator
+	fileprivate lazy var loadingIndicatorAlert: UIAlertController = {
+		// TODO: Dont use uialertcontroller: https://stackoverflow.com/a/48730050
+		let alert = UIAlertController(title: "", message: nil, preferredStyle: .alert)
+		let indicator = UIActivityIndicatorView(frame: alert.view.bounds)
+        indicator.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+
+        //add the activity indicator as a subview of the alert controller's view
+        alert.view.addSubview(indicator)
+        indicator.isUserInteractionEnabled = false // required otherwise if there buttons in the UIAlertController you will not be able to press them
+        indicator.startAnimating()
+		
+		return alert
 	}()
 	
 	override public func viewDidLoad() {
@@ -203,7 +229,7 @@ public class OBAFetchedTableViewController<O: OBAManagedObject>: UITableViewCont
 		return Promise(value: [])
 	}
 	
-	/// # !! Do not override this method. !!
+	/// # ⚠️ Do not override this method. ⚠️
 	/// You can call this method anytime to manually reload data from remote.
 	/// This method is responsible for managing the lifecycle of the `loadData()` promise,
 	/// in addition to the corresponding UI elements to indicate loading state.
@@ -231,10 +257,11 @@ public class OBAFetchedTableViewController<O: OBAManagedObject>: UITableViewCont
 			self.setPrompt(nil)
 		}.catch(on: .main) {
 			self.setPrompt($0.localizedDescription)
-			os_log("Unable to get data: %@", log: .default, type: .error, $0 as NSError)
+			os_log("reloadData() failed: %@", log: .default, type: .error, $0 as NSError)
 		}.always(on: .main) {
 			try? self.fetchedResultsController.performFetch()
 			self.showActivityIndicator = false
+			
 			os_log("reloadData() resolved.", log: .default, type: .info)
 		}
 		self.currentLoadingPromise = loadData
