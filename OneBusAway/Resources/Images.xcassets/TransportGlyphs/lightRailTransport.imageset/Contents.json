@@ -3,6 +3,16 @@
     {
       "idiom" : "universal",
       "filename" : "LightRailTransport.pdf"
+    },
+    {
+      "idiom" : "universal",
+      "filename" : "LightRailTransport Dark.pdf",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ]
     }
   ],
   "info" : {

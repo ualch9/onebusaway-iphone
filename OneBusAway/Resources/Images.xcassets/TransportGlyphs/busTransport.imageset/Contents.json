@@ -3,6 +3,16 @@
     {
       "idiom" : "universal",
       "filename" : "BusTransport.pdf"
+    },
+    {
+      "idiom" : "universal",
+      "filename" : "BusTransport Dark.pdf",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ]
     }
   ],
   "info" : {

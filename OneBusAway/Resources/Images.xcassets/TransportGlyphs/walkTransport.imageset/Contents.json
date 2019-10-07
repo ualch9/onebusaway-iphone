@@ -3,6 +3,16 @@
     {
       "idiom" : "universal",
       "filename" : "WalkTransport.pdf"
+    },
+    {
+      "idiom" : "universal",
+      "filename" : "WalkTransport Dark.pdf",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ]
     }
   ],
   "info" : {
